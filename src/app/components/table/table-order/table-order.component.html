@@ -1,0 +1,12 @@
+<mat-expansion-panel (opened)="panelOpenState = true"
+                     (closed)="panelOpenState = false">
+ <mat-expansion-panel-header>
+  <mat-panel-title>
+   Наш заказ
+  </mat-panel-title>
+  <mat-panel-description>
+   Currently I am {{panelOpenState ? 'open' : 'closed'}}
+  </mat-panel-description>
+ </mat-expansion-panel-header>
+ <h3>{{order?.dish}} - {{order?.count}}</h3>
+</mat-expansion-panel>

@@ -1,0 +1,85 @@
+<div class="row mb-2">
+
+        <mat-card class="example-card col-sm-6">
+                <mat-card-header>
+                        <div mat-card-avatar
+                             class="example-header-image"></div>
+                        <mat-card-title>Shiba Inu</mat-card-title>
+                        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image
+                     src=""
+                     alt="Photo of table">
+                <mat-card-content>
+                        <p>
+                                {{table.tableDescription}}
+                                {{Info | json}}
+                        </p>
+                </mat-card-content>
+                <div *ngIf="!tableIsReserved; else tableIsBooked">
+                        <mat-card-actions class="d-flex justify-content-center">
+                                <button mat-button
+                                        [class.text-danger]="TooManyGuests"
+                                        [disabled]="TooManyGuests"
+                                        (click)="addGuest()">
+                                        <i class="bi bi-plus-lg"></i>
+                                </button>
+                                <mat-form-field>
+                                        <mat-label>Количество гостей</mat-label>
+                                        <input matInput
+                                               type="number"
+                                               [(ngModel)]="table.currentGuestCount">
+                                </mat-form-field>
+                                <mat-form-field>
+                                        <mat-label>Начало в...</mat-label>
+                                        <input matInput
+                                               type="time"
+                                               [(ngModel)]="table.startTime">
+                                </mat-form-field>
+                                <button mat-button
+                                        [class.text-danger]="TooLowGuest"
+                                        [disabled]="TooLowGuest"
+                                        (click)="removeGuest()">
+                                        <i class="bi bi-dash-lg"></i>
+                                </button>
+                        </mat-card-actions>
+                        <div class="d-flex justify-content-center">
+                                <button [disabled]="UserHasReservedTable"
+                                        mat-raised-button
+                                        [matMenuTriggerFor]="aboveMenu"
+                                        class="btn-block"
+                                        mat-raised-button
+                                        color="primary">Забронировать</button>
+                        </div>
+                </div>
+                <ng-template #tableIsBooked>
+                        <h2>Стол забронирован</h2>
+                </ng-template>
+
+                <mat-menu #aboveMenu="matMenu"
+                          yPosition="above">
+                        <p>Для заказа стола нужно указать контактный телефон</p>
+                        <mat-form-field class="d-flex justify-content-center"
+                                        (click)="$event.stopPropagation()">
+                                <mat-label>Телефон</mat-label>
+                                <input matInput
+                                       #userPhone
+                                       [(ngModel)]="table.guest!.phone" />
+                        </mat-form-field>
+                        <div class="d-flex justify-content-center example-button-row">
+                                <button mat-raised-button
+                                        (click)="reserveTable()"
+                                        class="btn-block"
+                                        color="primary">Забронировать</button>
+                                <button mat-raised-button
+                                        color="warn">Отмена</button>
+                        </div>
+                </mat-menu>
+
+        </mat-card>
+
+
+        <div class="col-sm-6">
+                <app-table-order [order]="table.order"></app-table-order>
+        </div>
+</div>
