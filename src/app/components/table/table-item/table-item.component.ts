@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Table } from '../../../models/table.interface';
 
 @Component({
@@ -7,15 +7,14 @@ import { Table } from '../../../models/table.interface';
   styleUrl: './table-item.component.css',
 })
 export class TableItemComponent {
-  tableIsReserved: boolean = false;
-
-  table: Table = {
-    currentGuestCount: 0,
+  @Input() isEdit: boolean = false;
+  @Input() table: Table = {
+    currentGuestCount: 3,
     guestMaxCount: 10,
-    tableDescription: 'First table',
-    order: { dish: 'First dish', count: 1 },
+    tableDescription: 'asd',
     guest: { phone: '' },
   };
+  tableIsReserved: boolean = false;
 
   get Info() {
     return this.table;

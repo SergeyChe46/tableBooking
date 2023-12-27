@@ -1,0 +1,59 @@
+<mat-accordion>
+
+ <mat-expansion-panel>
+  <mat-expansion-panel-header>
+   <mat-panel-title>
+    Описать новый стол
+   </mat-panel-title>
+
+  </mat-expansion-panel-header>
+
+  <div [formGroup]="tableForm"
+       class="example-form">
+
+   <p>
+    <mat-form-field class="p-2 w-100"
+                    appearance="outline">
+     <mat-label>Название стола</mat-label>
+     <input formControlName="name"
+            type="text"
+            matInput
+            placeholder="Название стола">
+     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+     <mat-hint>Как обычно называют этот стол сотрудники</mat-hint>
+    </mat-form-field>
+   </p>
+   <p>
+    <mat-form-field class="p-2 w-100"
+                    appearance="outline">
+     <mat-label>Максимальное количество гостей за столом</mat-label>
+     <input formControlName="guestMaxCount"
+            type="number"
+            matInput
+            placeholder="Максимальное количество гостей за столом">
+     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+     <mat-hint>Максимальное количество гостей за столом</mat-hint>
+    </mat-form-field>
+   </p>
+   <p>
+    <mat-form-field class="p-2 w-100"
+                    appearance="outline">
+     <mat-label>Описание стола</mat-label>
+     <input formControlName="tableDescription"
+            type="text"
+            matInput
+            placeholder="Описание стола">
+     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+     <mat-hint>Дополнительная информация о столе для гостей. Необязательно.</mat-hint>
+    </mat-form-field>
+   </p>
+
+   <button (click)="onSubmit()"
+           mat-flat-button
+           color="primary">Добавить</button>
+
+  </div>
+ </mat-expansion-panel>
+</mat-accordion>
+
+<!-- <app-table-item [table]="tableForm.value"></app-table-item> -->
