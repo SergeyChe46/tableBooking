@@ -1,6 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginRequest } from '../../../models/auth/loginRequest.interface';
 import { AuthService } from '../../../services/auth/auth.service';
 
@@ -13,7 +13,8 @@ export class LoginComponent {
   loginForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.required]],
@@ -31,15 +32,6 @@ export class LoginComponent {
   }
 
   private login(userData: LoginRequest) {
-    this.authService.login(userData).subscribe({
-      next: (res: any) => {
-        console.log('next');
-
-        console.log(res);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.error);
-      },
-    });
+    this.authService.login(userData);
   }
 }

@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RegisterDataInterface } from '../../../models/auth/registerData.interface';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private authService: AuthService
   ) {
     this.registerForm = this.formBuilder.group({
       restaurantName: ['', Validators.required],
@@ -21,16 +22,13 @@ export class RegisterComponent {
     });
   }
   onSubmit() {
-    console.log(this.registerForm.value);
-    this.httpClient
-      .post('https://localhost:7170/api/Organization', {
-        name: this.registerForm.get('login')?.value,
-        password: this.registerForm.get('password')?.value,
-      })
-      .subscribe({
-        next: (res: any) => {
-          console.log(res);
-        },
-      });
+    let userData: RegisterDataInterface = {
+      login: this.registerForm.get('login')?.value,
+      name: this.registerForm.get('restaurantName')?.value,
+      password: this.registerForm.get('password')?.value,
+    };
+    console.log(userData);
+
+    this.authService.register(userData);
   }
 }

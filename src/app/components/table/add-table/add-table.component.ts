@@ -46,6 +46,6 @@ export class AddTableComponent {
       tableDescription: this.tableDescription.value,
     };
     this.tableService.addTable(tableModel);
-    console.log(this.tableService.myTables);
+    this.tableForm.reset();
   }
 }

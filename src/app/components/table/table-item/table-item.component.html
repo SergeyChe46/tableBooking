@@ -1,56 +1,75 @@
+<mat-accordion>
+
+ <mat-expansion-panel>
+  <mat-expansion-panel-header>
+   <mat-panel-title>
+    {{table.name}} - {{table.startTime}}
+   </mat-panel-title>
+   <mat-panel-description>
+    {{table.currentGuestCount > 0 ? 'Стол занят':'Стол свободен'}}
+    <!-- <mat-icon>date_range</mat-icon> -->
+   </mat-panel-description>
+
+  </mat-expansion-panel-header>
+  <div class="row">
+
 <mat-card class="w-100 mt-1 mat-elevation-z18">
- <mat-card-header>
-  <div mat-card-avatar
-       class="example-header-image"></div>
-<mat-card-title>{{table.name}}</mat-card-title>
-</mat-card-header>
-<img mat-card-image
-     src=""
-     alt="Photo of table">
-<mat-card-content>
-<p>{{table?.tableDescription}}</p>
-</mat-card-content>
-<div *ngIf="!tableIsReserved; else tableIsBooked">
- <mat-card-actions class="d-flex justify-content-center">
-  <button mat-button
-          [class.text-danger]="TooManyGuests"
-          [disabled]="TooManyGuests"
-          (click)="addGuest()">
-   <i class="bi bi-plus-lg"></i>
-  </button>
-  <mat-form-field>
-   <mat-label>Количество гостей</mat-label>
-   <input matInput
-          type="number"
-          [(ngModel)]="table.currentGuestCount">
-  </mat-form-field>
-  <mat-form-field>
-   <mat-label>Начало в...</mat-label>
-   <input matInput
-          type="time"
-          [(ngModel)]="table.startTime">
-  </mat-form-field>
-  <button mat-button
-          [class.text-danger]="TooLowGuest"
-          [disabled]="TooLowGuest"
-          (click)="removeGuest()">
+        <mat-card-header>
+         <div mat-card-avatar
+              class="example-header-image"></div>
+         <mat-card-title>{{table.name}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image
+             src=""
+             alt="Photo of table">
+        <mat-card-content>
+         <p>{{table?.tableDescription}}</p>
+        </mat-card-content>
+        <div *ngIf="!tableIsReserved; else tableIsBooked">
+         <mat-card-actions class="d-flex justify-content-center">
+          <button mat-button
+                  [class.text-danger]="TooManyGuests"
+                  [disabled]="TooManyGuests"
+                  (click)="addGuest()">
+           <i class="bi bi-plus-lg"></i>
+          </button>
+          <mat-form-field>
+           <mat-label>Количество гостей</mat-label>
+           <input matInput
+                  type="number"
+                  [(ngModel)]="table.currentGuestCount">
+          </mat-form-field>
+          <mat-form-field>
+           <mat-label>Начало в...</mat-label>
+           <input matInput
+                  type="time"
+                  [(ngModel)]="table.startTime">
+          </mat-form-field>
+          <button mat-button
+                  [class.text-danger]="TooLowGuest"
+                  [disabled]="TooLowGuest"
+                  (click)="removeGuest()">
    <i class="bi bi-dash-lg"></i>
   </button>
  </mat-card-actions>
  <div class="d-flex justify-content-center">
-<button [disabled]="UserHasReservedTable || isEdit"
-        mat-raised-button
+<!-- [disabled]="UserHasReservedTable || isEdit" -->
+<button mat-raised-button
         [matMenuTriggerFor]="aboveMenu"
         class="btn-block"
         mat-raised-button
-        color="primary">Забронировать</button>
-</div>
+          color="primary">Забронировать</button>
+  </div>
 </div>
 <ng-template #tableIsBooked>
  <h2>Стол забронирован</h2>
 </ng-template>
 
 </mat-card>
+</div>
+</mat-expansion-panel>
+</mat-accordion>
+
 
 <mat-menu #aboveMenu="matMenu"
           yPosition="above">
@@ -60,7 +79,7 @@
   <mat-label>Телефон</mat-label>
   <input matInput
          #userPhone
-         [(ngModel)]="table.guest!.phone" />
+         [(ngModel)]="guest!.phone" />
  </mat-form-field>
  <div class="d-flex justify-content-center example-button-row">
   <button mat-raised-button
