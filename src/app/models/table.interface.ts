@@ -8,6 +8,7 @@ export interface Table {
   currentGuestCount: number;
   guestMaxCount: number;
   tableDescription: string;
+  isBooked: boolean;
   photo?: string;
   order?: Order;
   guest: Guest;

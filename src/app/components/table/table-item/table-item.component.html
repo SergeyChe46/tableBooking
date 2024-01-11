@@ -53,12 +53,18 @@
   </button>
  </mat-card-actions>
  <div class="d-flex justify-content-center">
-<!-- [disabled]="UserHasReservedTable || isEdit" -->
-<button mat-raised-button
-        [matMenuTriggerFor]="aboveMenu"
+<button *ngIf="!table.isBooked"
+        mat-raised-button
+        [matMenuTriggerFor]="aboveMenuBooking"
         class="btn-block"
         mat-raised-button
           color="primary">Забронировать</button>
+<button *ngIf="table.isBooked"
+        mat-raised-button
+        [matMenuTriggerFor]="aboveMenuCancelBooking"
+        class="btn-block"
+        mat-raised-button
+        color="warn">Отмена брони</button>
   </div>
 </div>
 <ng-template #tableIsBooked>
@@ -71,7 +77,7 @@
 </mat-accordion>
 
 
-<mat-menu #aboveMenu="matMenu"
+<mat-menu #aboveMenuBooking="matMenu"
           yPosition="above">
  <p>Для заказа стола нужно указать контактный телефон</p>
  <mat-form-field class="d-flex justify-content-center"
@@ -88,5 +94,16 @@
           color="primary">Забронировать</button>
   <button mat-raised-button
           color="warn">Отмена</button>
+ </div>
+</mat-menu>
+
+<mat-menu #aboveMenuCancelBooking="matMenu"
+          yPosition="above">
+ <p>Уверены, что хотите отменить бронь?</p>
+ <div class="d-flex justify-content-center example-button-row">
+  <button mat-raised-button
+          (click)="reserveTableCancel()"
+          class="btn-block"
+          color="primary">Отмена</button>
  </div>
 </mat-menu>

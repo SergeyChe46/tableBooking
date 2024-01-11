@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -14,6 +14,7 @@ import { AdminWorkspaceService } from '../../../services/admin-workspace.service
   styleUrl: './add-table.component.css',
 })
 export class AddTableComponent {
+  @Output() refreshLis = new EventEmitter<boolean>();
   tableForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,

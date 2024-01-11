@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Guest } from '../../../models/guest.interface';
 import { ReserveTableInterface } from '../../../models/reserveTable.interface';
 import { Table } from '../../../models/table.interface';
@@ -9,21 +9,20 @@ import { AdminWorkspaceService } from '../../../services/admin-workspace.service
   templateUrl: './table-item.component.html',
   styleUrl: './table-item.component.css',
 })
-export class TableItemComponent implements OnInit {
-  constructor(private adminService: AdminWorkspaceService) {}
-  ngOnInit(): void {
-    // console.log(this.table);
+export class TableItemComponent {
+  constructor(private adminService: AdminWorkspaceService) {
+    adminService.TableRefresh$.subscribe({
+      next: (table: Table) => {
+        if (this.table.id === table.id) {
+          this.table = table;
+        }
+      },
+    });
   }
+
   guest: Guest = { phone: '' };
   @Input() isEdit: boolean = false;
-  @Input() table: Table = {
-    id: '',
-    currentGuestCount: 3,
-    guestMaxCount: 10,
-    tableDescription: 'asd',
-    guest: this.guest,
-    startTime: '',
-  };
+  @Input() table!: Table;
   tableIsReserved: boolean = false;
 
   get Info() {
@@ -45,10 +44,22 @@ export class TableItemComponent implements OnInit {
       guestPhone: this.guest.phone,
       id: this.table.id,
       startTime: this.table.startTime,
+      isBooked: true,
     };
     this.adminService.reserveTable(reserveData);
 
     localStorage.setItem('alreadyReserve', 'true');
+  }
+
+  reserveTableCancel() {
+    let reserveData: ReserveTableInterface = {
+      currentGuestCount: 0,
+      guestPhone: '',
+      id: this.table.id,
+      startTime: '',
+      isBooked: false,
+    };
+    this.adminService.resetTableBooking(reserveData);
   }
 
   get TooManyGuests() {

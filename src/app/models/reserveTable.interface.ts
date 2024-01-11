@@ -3,4 +3,5 @@ export interface ReserveTableInterface {
   currentGuestCount: number;
   startTime: string;
   guestPhone: string;
+  isBooked: boolean;
 }
