@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   HttpClientModule,
   provideHttpClient,
@@ -7,6 +8,9 @@ import { NgModule, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +41,7 @@ export function tokenGetter() {
   const authService = inject(AuthService);
   return authService.token;
 }
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,6 +63,7 @@ export function tokenGetter() {
     HttpClientModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatChipsModule,
     MatMenuModule,
     BrowserModule,
     MatTableModule,
@@ -71,10 +77,14 @@ export function tokenGetter() {
     MatExpansionModule,
     MatDividerModule,
     ToastrModule.forRoot(),
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [
     provideClientHydration(),
     provideHttpClient(withInterceptors([AuthInterceptor])),
+    DatePipe,
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-ru' },
   ],
   bootstrap: [AppComponent],
 })
