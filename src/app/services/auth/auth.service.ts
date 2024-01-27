@@ -14,7 +14,6 @@ export class AuthService {
 
   login(userData: LoginRequest) {
     localStorage.removeItem(TOKEN_FIELD_NAME);
-    console.log(userData);
     this.httpClient.post(this.URL + 'token', userData).subscribe({
       next: (res: any) => {
         const token = res.token;

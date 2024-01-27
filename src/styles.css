@@ -233,3 +233,7 @@ button.toast-close-button {
   width: 25em;
  }
 }
+
+.mat-calendar-controls {
+ margin: 0 !important;
+}

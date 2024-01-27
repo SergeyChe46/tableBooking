@@ -1,16 +1,10 @@
-import { BookingInfoRequest } from './bookingInfo.interface';
-import { Guest } from './guest.interface';
-import { Order } from './order.interface';
+import { BookingInfo } from './bookingInfo.interface';
 
 export interface Table {
   id: string;
-  bookingInfo: BookingInfoRequest[];
+  bookingInfo: BookingInfo[];
   name?: string;
-  currentGuestCount: number;
   guestMaxCount: number;
   tableDescription: string;
-  isBooked: boolean;
   photo?: string;
-  order?: Order;
-  guest: Guest;
 }

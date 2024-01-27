@@ -31,11 +31,13 @@ import { MainPanelComponent } from './components/admin/main-panel/main-panel.com
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AddTableComponent } from './components/table/add-table/add-table.component';
+import { BookingInfoDetailComponent } from './components/table/booking-info-detail/booking-info-detail.component';
 import { MyTablesComponent } from './components/table/my-tables/my-tables.component';
 import { TableItemComponent } from './components/table/table-item/table-item.component';
 import { TableOrderComponent } from './components/table/table-order/table-order.component';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { AuthService } from './services/auth/auth.service';
+import { TimeOnlyPipe } from './services/pipes/time-only.pipe';
 
 export function tokenGetter() {
   const authService = inject(AuthService);
@@ -52,6 +54,8 @@ export function tokenGetter() {
     AddTableComponent,
     MyTablesComponent,
     RegisterComponent,
+    BookingInfoDetailComponent,
+    TimeOnlyPipe,
   ],
   imports: [
     JwtModule.forRoot({

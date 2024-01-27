@@ -1,12 +1,13 @@
 <mat-accordion>
 
- <mat-expansion-panel>
+<mat-expansion-panel (opened)="extractBookedTime()">
+
   <mat-expansion-panel-header>
    <mat-panel-title>
         {{table.name}}
    </mat-panel-title>
    <mat-panel-description>
-    {{table.currentGuestCount > 0 ? 'Стол занят':'Стол свободен'}}
+{{reserveData.currentGuestCount > 0 ? 'Стол занят':'Стол свободен'}}
     <!-- <mat-icon>date_range</mat-icon> -->
    </mat-panel-description>
 
@@ -14,22 +15,26 @@
   <div class="row">
 
 <mat-card class="w-100 mt-1 mat-elevation-z18">
+<!-- Шапка стола -->
         <mat-card-header>
          <div mat-card-avatar
               class="example-header-image"></div>
          <mat-card-title>{{table.name}}</mat-card-title>
         </mat-card-header>
+        <!--  -->
+
         <img mat-card-image
              src=""
              alt="Photo of table">
         <mat-card-content>
-         <p>{{table?.tableDescription}}</p>
+        <p>{{table?.tableDescription}}</p>
         </mat-card-content>
-        <div *ngIf="!tableIsReserved; else tableIsBooked">
+        <div>
+                <!-- Действия для первой брони стола -->
          <mat-card-actions class="d-flex justify-content-center">
           <button mat-button
                   [class.text-danger]="TooManyGuests"
-                  [disabled]="TooManyGuests"
+                  [disabled]="TooManyGuests || reserveData.isBooked"
                   (click)="addGuest()">
            <i class="bi bi-plus-lg"></i>
           </button>
@@ -39,52 +44,49 @@
            <mat-label>Количество гостей</mat-label>
            <input matInput
                   type="number"
-                  [(ngModel)]="table.currentGuestCount">
+                  [disabled]="reserveData.isBooked"
+                  [(ngModel)]="reserveData.currentGuestCount">
           </mat-form-field>
           <mat-form-field>
            <mat-label>Начало в...</mat-label>
            <input matInput
                   type="time"
-                  [(ngModel)]="bookingInfo.startTime">
+                  [disabled]="reserveData.isBooked"
+                  [(ngModel)]="reserveData.startTime">
           </mat-form-field>
           <button mat-button
                   [class.text-danger]="TooLowGuest"
-                  [disabled]="TooLowGuest"
+                  [disabled]="TooLowGuest || reserveData.isBooked"
                   (click)="removeGuest()">
    <i class="bi bi-dash-lg"></i>
   </button>
  </mat-card-actions>
-<!-- <mat-chip-listbox *ngFor="let time of Times()"
-                  aria-label="bookedTime">
-        <mat-chip-option>{{time}}</mat-chip-option>
+<!--  -->
 
-</mat-chip-listbox> -->
+<!-- Список времени брони -->
+<mat-chip-listbox aria-label="bookedTime">
+        <mat-chip-option *ngFor="let info of BookedTimes"
+                         (selectionChange)="selectTime(info.id)">{{info.startTime! | timeonly}}</mat-chip-option>
+</mat-chip-listbox>
+<!--  -->
 
+<!-- Кнопки действий в карте стола -->
  <div class="d-flex justify-content-center">
-<button *ngIf="!table.isBooked"
+<button
         mat-raised-button
         [matMenuTriggerFor]="aboveMenuBooking"
         class="btn-block"
         mat-raised-button
           color="primary">Забронировать</button>
-<button *ngIf="table.isBooked"
-        mat-raised-button
-        [matMenuTriggerFor]="aboveMenuCancelBooking"
-        class="btn-block"
-        mat-raised-button
-        color="warn">Отмена брони</button>
-  </div>
+        </div>
+        <!--  -->
 </div>
-<ng-template #tableIsBooked>
- <h2>Стол забронирован</h2>
-</ng-template>
-
 </mat-card>
 </div>
 </mat-expansion-panel>
 </mat-accordion>
 
-
+<!-- Меню для добавления первой брони на дату -->
 <mat-menu #aboveMenuBooking="matMenu"
           yPosition="above">
  <p>Для заказа стола нужно указать контактный телефон</p>
@@ -93,7 +95,7 @@
   <mat-label>Телефон</mat-label>
   <input matInput
          #userPhone
-         [(ngModel)]="guest!.phone" />
+         [(ngModel)]="reserveData!.guestPhone" />
  </mat-form-field>
  <div class="d-flex justify-content-center example-button-row">
   <button mat-raised-button
@@ -104,14 +106,52 @@
           color="warn">Отмена</button>
  </div>
 </mat-menu>
+<!--  -->
 
+<!-- Меню для добавления дополнительной брони на дату -->
+<mat-menu #aboveMenuAddBooking="matMenu"
+          yPosition="above">
+ <mat-form-field>
+  <mat-label>Количество гостей</mat-label>
+  <input matInput
+         (click)="$event.stopPropagation()"
+         type="number"
+         [(ngModel)]="reserveData.currentGuestCount">
+ </mat-form-field>
+ <mat-form-field>
+  <mat-label>Начало в...</mat-label>
+  <input matInput
+         (click)="$event.stopPropagation()"
+         type="time"
+         [(ngModel)]="reserveData.startTime">
+ </mat-form-field>
+ <p>Для заказа стола нужно указать контактный телефон</p>
+ <mat-form-field class="d-flex justify-content-center">
+  <mat-label>Телефон</mat-label>
+  <input matInput
+         (click)="$event.stopPropagation()"
+         #userPhone
+         [(ngModel)]="reserveData!.guestPhone" />
+ </mat-form-field>
+ <div class="d-flex justify-content-center example-button-row">
+  <button mat-raised-button
+          (click)="reserveTable()"
+          class="btn-block"
+          color="primary">Забронировать</button>
+  <button mat-raised-button
+          color="warn">Отмена</button>
+ </div>
+</mat-menu>
+<!--  -->
+
+<!-- Отмена брони -->
 <mat-menu #aboveMenuCancelBooking="matMenu"
           yPosition="above">
  <p>Уверены, что хотите отменить бронь?</p>
  <div class="d-flex justify-content-center example-button-row">
-  <button mat-raised-button
-          (click)="reserveTableCancel()"
+<button mat-raised-button
           class="btn-block"
           color="primary">Отмена</button>
  </div>
 </mat-menu>
+<!--  -->

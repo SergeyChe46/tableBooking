@@ -48,32 +48,32 @@ export class AdminWorkspaceService {
   }
 
   reserveTable(reservedData: ReserveTableInterface) {
-    this.httpClient
-      .patch<Table>(this.URL + `Reserve/${reservedData.id}`, reservedData)
-      .subscribe({
-        next: (res: Table) => {
-          this.toastr.showSuccess('Стол зарезервирован');
-          this.TableRefresh$.next(res);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.toastr.showWarning(error.error);
-        },
-      });
+    this.httpClient.patch<Table>(this.URL + 'Reserve', reservedData).subscribe({
+      next: (res: Table) => {
+        this.toastr.showSuccess('Стол зарезервирован');
+        this.tableReserve$.next(res);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.error);
+
+        this.toastr.showWarning(error.error);
+      },
+    });
   }
   //TO DO
-  resetTableBooking(reservedData: ReserveTableInterface) {
-    this.httpClient
-      .patch(this.URL + `Reserve/${reservedData.id}`, reservedData)
-      .subscribe({
-        next: (res: any) => {
-          this.toastr.showSuccess('Отменено');
-          this.TableRefresh$.next(res);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.toastr.showWarning(error.error);
-        },
-      });
-  }
+  // resetTableBooking(reservedData: ReserveTableInterface) {
+  //   this.httpClient
+  //     .patch(this.URL + `Reserve/${reservedData.id}`, reservedData)
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         this.toastr.showSuccess('Отменено');
+  //         this.TableRefresh$.next(res);
+  //       },
+  //       error: (error: HttpErrorResponse) => {
+  //         this.toastr.showWarning(error.error);
+  //       },
+  //     });
+  // }
 
   getTables() {
     this.httpClient.get<Table[]>(this.URL + 'GetTables').subscribe({
