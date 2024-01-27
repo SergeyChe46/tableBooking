@@ -26,6 +26,13 @@ export class TableItemComponent implements OnInit {
         }
       },
     });
+    adminService.CanceledBooking$.subscribe({
+      next: (bookingInfo: BookingInfo) => {
+        this.bookedTimes.filter((bi) => {
+          bi.id == bookingInfo.id;
+        });
+      },
+    });
   }
 
   ngOnInit(): void {
@@ -59,6 +66,7 @@ export class TableItemComponent implements OnInit {
   }
   reserveTable() {
     this.adminService.reserveTable(this.reserveData);
+    this.clearForm();
   }
 
   get BookedTimes() {
@@ -72,7 +80,7 @@ export class TableItemComponent implements OnInit {
     });
 
     this.dialog.open(BookingInfoDetailComponent, {
-      data: { bookInfo },
+      data: bookInfo,
     });
   }
 
@@ -93,5 +101,12 @@ export class TableItemComponent implements OnInit {
 
   get TableIsBookedToday() {
     return;
+  }
+
+  private clearForm() {
+    (this.reserveData.id = ''),
+      (this.reserveData.currentGuestCount = 0),
+      (this.reserveData.startTime = ''),
+      (this.reserveData.guestPhone = '');
   }
 }

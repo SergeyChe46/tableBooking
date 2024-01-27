@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { BASE_TABLE_API } from '../consts';
 import { AddTableViewModel } from '../models/addTableViewModel.interface';
+import { BookingInfo } from '../models/bookingInfo.interface';
 import { ReserveTableInterface } from '../models/reserveTable.interface';
 import { Table } from '../models/table.interface';
 import { ToastrBaseService } from './toastr.service';
@@ -15,6 +16,11 @@ export class AdminWorkspaceService {
   private tables: Table[] = [];
   private loadTables$ = new Subject<Table[]>();
   private tableReserve$ = new Subject<Table>();
+  private canceledBooking$ = new Subject<BookingInfo>();
+
+  public get CanceledBooking$() {
+    return this.canceledBooking$;
+  }
 
   public get LoadTables$() {
     return this.loadTables$;
@@ -60,20 +66,23 @@ export class AdminWorkspaceService {
       },
     });
   }
-  //TO DO
-  // resetTableBooking(reservedData: ReserveTableInterface) {
-  //   this.httpClient
-  //     .patch(this.URL + `Reserve/${reservedData.id}`, reservedData)
-  //     .subscribe({
-  //       next: (res: any) => {
-  //         this.toastr.showSuccess('Отменено');
-  //         this.TableRefresh$.next(res);
-  //       },
-  //       error: (error: HttpErrorResponse) => {
-  //         this.toastr.showWarning(error.error);
-  //       },
-  //     });
-  // }
+
+  cancelTableBooking(bookingInfoId: string) {
+    this.httpClient
+      .delete(this.URL + `CancelReserve/${bookingInfoId}`)
+      .subscribe({
+        next: (res: any) => {
+          this.toastr.showSuccess('Отменено');
+          this.TableRefresh$.next(res);
+          this.CanceledBooking$.next(res);
+          console.log('ok');
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastr.showWarning(error.error);
+          console.log('not ok');
+        },
+      });
+  }
 
   getTables() {
     this.httpClient.get<Table[]>(this.URL + 'GetTables').subscribe({
