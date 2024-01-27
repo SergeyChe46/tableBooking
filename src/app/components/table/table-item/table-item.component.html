@@ -34,7 +34,7 @@
          <mat-card-actions class="d-flex justify-content-center">
           <button mat-button
                   [class.text-danger]="TooManyGuests"
-                  [disabled]="TooManyGuests || reserveData.isBooked"
+                  [disabled]="TooManyGuests"
                   (click)="addGuest()">
            <i class="bi bi-plus-lg"></i>
           </button>
@@ -44,19 +44,17 @@
            <mat-label>Количество гостей</mat-label>
            <input matInput
                   type="number"
-                  [disabled]="reserveData.isBooked"
                   [(ngModel)]="reserveData.currentGuestCount">
           </mat-form-field>
           <mat-form-field>
            <mat-label>Начало в...</mat-label>
            <input matInput
                   type="time"
-                  [disabled]="reserveData.isBooked"
                   [(ngModel)]="reserveData.startTime">
           </mat-form-field>
           <button mat-button
                   [class.text-danger]="TooLowGuest"
-                  [disabled]="TooLowGuest || reserveData.isBooked"
+                  [disabled]="TooLowGuest"
                   (click)="removeGuest()">
    <i class="bi bi-dash-lg"></i>
   </button>

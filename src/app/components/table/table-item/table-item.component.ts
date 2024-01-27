@@ -47,7 +47,6 @@ export class TableItemComponent implements OnInit {
     bookDate: '',
     startTime: '',
     guestPhone: '',
-    isBooked: false,
   };
   selectedDate: string = '';
   selectedInfoId: string = '';
@@ -59,7 +58,6 @@ export class TableItemComponent implements OnInit {
     this.reserveData.currentGuestCount--;
   }
   reserveTable() {
-    this.reserveData.isBooked = true;
     this.adminService.reserveTable(this.reserveData);
   }
 

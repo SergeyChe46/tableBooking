@@ -4,5 +4,4 @@ export interface ReserveTableInterface {
   bookDate: string;
   startTime: string;
   guestPhone: string;
-  isBooked: boolean;
 }
