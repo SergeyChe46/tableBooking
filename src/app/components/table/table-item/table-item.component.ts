@@ -13,6 +13,13 @@ import { BookingInfoDetailComponent } from '../booking-info-detail/booking-info-
   styleUrl: './table-item.component.css',
 })
 export class TableItemComponent implements OnInit {
+  @Input() isEdit: boolean = false;
+  @Input() table!: Table;
+  @Input() set BookDate(value: Date) {
+    this.selectedDate = value.toLocaleDateString();
+    this.reserveData.bookDate = this.selectedDate;
+  }
+
   constructor(
     private adminService: AdminWorkspaceService,
     private datePipe: DatePipe,
@@ -39,17 +46,7 @@ export class TableItemComponent implements OnInit {
     this.reserveData.id = this.table.id;
   }
 
-  @Input() isEdit: boolean = false;
-  @Input() table!: Table;
-  @Input() set BookDate(value: Date) {
-    this.selectedDate = value.toLocaleDateString();
-    this.reserveData.bookDate = this.selectedDate;
-  }
-
-  private bookedTimes: BookingInfo[] = [];
-
   reserveData: ReserveTableInterface = {
-    id: '',
     currentGuestCount: 0,
     bookDate: '',
     startTime: '',
@@ -57,6 +54,13 @@ export class TableItemComponent implements OnInit {
   };
   selectedDate: string = '';
   selectedInfoId: string = '';
+
+  get TooManyGuests() {
+    return this.reserveData.currentGuestCount >= this.table.guestMaxCount;
+  }
+  get TooLowGuest() {
+    return this.reserveData.currentGuestCount <= 0;
+  }
 
   addGuest() {
     this.reserveData.currentGuestCount++;
@@ -89,24 +93,10 @@ export class TableItemComponent implements OnInit {
     this.bookedTimes.push(...this.table.bookingInfo);
   }
 
-  get TooManyGuests() {
-    return this.reserveData.currentGuestCount >= this.table.guestMaxCount;
-  }
-  get TooLowGuest() {
-    return this.reserveData.currentGuestCount <= 0;
-  }
-  get UserHasReservedTable() {
-    return localStorage.getItem('alreadyReserve');
-  }
-
-  get TableIsBookedToday() {
-    return;
-  }
-
   private clearForm() {
-    (this.reserveData.id = ''),
-      (this.reserveData.currentGuestCount = 0),
+    (this.reserveData.currentGuestCount = 0),
       (this.reserveData.startTime = ''),
       (this.reserveData.guestPhone = '');
   }
+  private bookedTimes: BookingInfo[] = [];
 }

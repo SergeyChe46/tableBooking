@@ -1,5 +1,5 @@
 export interface ReserveTableInterface {
-  id: string;
+  id?: string;
   currentGuestCount: number;
   bookDate: string;
   startTime: string;
