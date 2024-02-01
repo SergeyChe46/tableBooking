@@ -7,7 +7,9 @@
     <h4>Начало в {{bookingInfo.startTime! | timeonly}}</h4>
   </mat-card-content>
   <mat-card-actions>
+
     <button mat-button
+            mat-dialog-close cdkFocusInitial
             (click)="cancelReserve(bookingInfo.id)">Отмена</button>
   </mat-card-actions>
 </mat-card>

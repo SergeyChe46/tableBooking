@@ -61,7 +61,6 @@ export class AdminWorkspaceService {
       },
       error: (error: HttpErrorResponse) => {
         console.log(error.error);
-
         this.toastr.showWarning(error.error);
       },
     });

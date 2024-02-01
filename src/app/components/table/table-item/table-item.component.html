@@ -1,6 +1,6 @@
 <mat-accordion>
 
-<mat-expansion-panel (opened)="extractBookedTime()">
+<mat-expansion-panel>
 
   <mat-expansion-panel-header>
    <mat-panel-title>
@@ -63,19 +63,18 @@
 
 <!-- Список времени брони -->
 <mat-chip-listbox aria-label="bookedTime">
-        <mat-chip-option *ngFor="let info of BookedTimes"
+        <mat-chip-option *ngFor="let info of todayBookings()"
                          (selectionChange)="selectTime(info.id)">{{info.startTime! | timeonly}}</mat-chip-option>
 </mat-chip-listbox>
 <!--  -->
 
 <!-- Кнопки действий в карте стола -->
  <div class="d-flex justify-content-center">
-<button
-        mat-raised-button
+<button mat-raised-button
         [matMenuTriggerFor]="aboveMenuBooking"
         class="btn-block"
         color="primary">Забронировать</button>
-        </div>
+  </div>
         <!--  -->
 </div>
 </mat-card>
@@ -97,6 +96,7 @@
  <div class="d-flex justify-content-center example-button-row">
   <button mat-raised-button
           (click)="reserveTable()"
+          [disabled]="CanReserve"
           class="btn-block"
           color="primary">Забронировать</button>
   <button mat-raised-button

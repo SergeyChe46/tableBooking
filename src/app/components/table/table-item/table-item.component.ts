@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingInfo } from '../../../models/bookingInfo.interface';
@@ -11,9 +10,9 @@ import { BookingInfoDetailComponent } from '../booking-info-detail/booking-info-
   selector: 'app-table-item',
   templateUrl: './table-item.component.html',
   styleUrl: './table-item.component.css',
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableItemComponent implements OnInit {
-  @Input() isEdit: boolean = false;
   @Input() table!: Table;
   @Input() set BookDate(value: Date) {
     this.selectedDate = value.toLocaleDateString();
@@ -22,21 +21,20 @@ export class TableItemComponent implements OnInit {
 
   constructor(
     private adminService: AdminWorkspaceService,
-    private datePipe: DatePipe,
-    public dialog: MatDialog
+    private dialog: MatDialog
   ) {
     adminService.TableRefresh$.subscribe({
       next: (table: Table) => {
         if (this.table.id == table.id) {
           this.table = table;
-          this.bookedTimes = [...this.bookedTimes, ...table.bookingInfo];
+          this.#bookedTimes = [...this.#bookedTimes, ...table.bookingInfo];
         }
       },
     });
     adminService.CanceledBooking$.subscribe({
       next: (bookingInfo: BookingInfo) => {
-        this.bookedTimes.filter((bi) => {
-          bi.id == bookingInfo.id;
+        this.#bookedTimes = this.BookedTimes.filter((bi) => {
+          return bi.id != bookingInfo.id;
         });
       },
     });
@@ -44,6 +42,7 @@ export class TableItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.reserveData.id = this.table.id;
+    this.#extractBookedTime();
   }
 
   reserveData: ReserveTableInterface = {
@@ -62,6 +61,15 @@ export class TableItemComponent implements OnInit {
     return this.reserveData.currentGuestCount <= 0;
   }
 
+  get BookedTimes() {
+    return this.#bookedTimes;
+  }
+
+  get CanReserve() {
+    return (
+      this.reserveData.startTime == '' || this.reserveData.guestPhone == ''
+    );
+  }
   addGuest() {
     this.reserveData.currentGuestCount++;
   }
@@ -70,16 +78,12 @@ export class TableItemComponent implements OnInit {
   }
   reserveTable() {
     this.adminService.reserveTable(this.reserveData);
-    this.clearForm();
-  }
-
-  get BookedTimes() {
-    return this.bookedTimes;
+    this.#clearForm();
   }
 
   selectTime(id: string) {
     this.selectedInfoId = id;
-    let bookInfo = this.bookedTimes.find((bt) => {
+    let bookInfo = this.#bookedTimes.find((bt) => {
       return bt.id == id;
     });
 
@@ -88,15 +92,22 @@ export class TableItemComponent implements OnInit {
     });
   }
 
-  extractBookedTime() {
-    this.bookedTimes = [];
-    this.bookedTimes.push(...this.table.bookingInfo);
+  todayBookings(): BookingInfo[] {
+    return this.BookedTimes.filter((bt) => {
+      return new Date(bt.bookDate!).toLocaleDateString() == this.selectedDate;
+    });
   }
 
-  private clearForm() {
-    (this.reserveData.currentGuestCount = 0),
-      (this.reserveData.startTime = ''),
-      (this.reserveData.guestPhone = '');
+  #extractBookedTime() {
+    this.#bookedTimes = [];
+    this.#bookedTimes = [...this.BookedTimes, ...this.table.bookingInfo];
   }
-  private bookedTimes: BookingInfo[] = [];
+
+  #clearForm() {
+    this.reserveData.currentGuestCount = 0;
+    this.reserveData.startTime = '';
+    this.reserveData.guestPhone = '';
+  }
+
+  #bookedTimes: BookingInfo[] = [];
 }

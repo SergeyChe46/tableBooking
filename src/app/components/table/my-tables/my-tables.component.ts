@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Table } from '../../../models/table.interface';
 import { AdminWorkspaceService } from '../../../services/admin-workspace.service';
 

@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BookingInfo } from '../../../models/bookingInfo.interface';
 import { AdminWorkspaceService } from '../../../services/admin-workspace.service';
-
 @Component({
   selector: 'app-booking-info-detail',
   templateUrl: './booking-info-detail.component.html',
@@ -11,12 +10,12 @@ import { AdminWorkspaceService } from '../../../services/admin-workspace.service
 export class BookingInfoDetailComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public bookingInfo: BookingInfo,
+    public dialogRef: MatDialogRef<BookingInfoDetailComponent>,
     private tableService: AdminWorkspaceService
   ) {}
 
   cancelReserve(bookingInfoId: string) {
-    console.log(this.bookingInfo);
-
+    this.dialogRef.close();
     this.tableService.cancelTableBooking(bookingInfoId);
   }
 }
