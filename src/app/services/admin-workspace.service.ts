@@ -74,11 +74,9 @@ export class AdminWorkspaceService {
           this.toastr.showSuccess('Отменено');
           this.TableRefresh$.next(res);
           this.CanceledBooking$.next(res);
-          console.log('ok');
         },
         error: (error: HttpErrorResponse) => {
           this.toastr.showWarning(error.error);
-          console.log('not ok');
         },
       });
   }
