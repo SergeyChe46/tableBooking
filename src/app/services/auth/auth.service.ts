@@ -1,5 +1,6 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BASE_ORGANIZATION_API, TOKEN_FIELD_NAME } from '../../consts';
 import { LoginRequest } from '../../models/auth/loginRequest.interface';
@@ -10,15 +11,20 @@ import { RegisterDataInterface } from '../../models/auth/registerData.interface'
 })
 export class AuthService {
   private URL: string = BASE_ORGANIZATION_API;
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    @Inject(DOCUMENT) private document: Document) { }
+
+  localStorage = this.document.defaultView?.localStorage
 
   login(userData: LoginRequest) {
-    localStorage.removeItem(TOKEN_FIELD_NAME);
+    this.localStorage?.removeItem(TOKEN_FIELD_NAME);
     this.httpClient.post(this.URL + 'token', userData).subscribe({
       next: (res: any) => {
         const token = res.token;
         if (token) {
-          localStorage.setItem(TOKEN_FIELD_NAME, token);
+          this.localStorage?.setItem(TOKEN_FIELD_NAME, token);
         }
         this.router.navigate(['/lk']);
       },
@@ -39,6 +45,6 @@ export class AuthService {
   }
 
   get token() {
-    return localStorage.getItem(TOKEN_FIELD_NAME);
+    return this.localStorage?.getItem(TOKEN_FIELD_NAME);
   }
 }
