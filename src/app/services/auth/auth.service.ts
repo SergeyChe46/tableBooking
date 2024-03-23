@@ -36,7 +36,7 @@ export class AuthService {
   register(registerData: RegisterDataInterface) {
     this.httpClient.post(this.URL + 'Register', registerData).subscribe({
       next: (res: any) => {
-        console.log(res);
+        this.router.navigate(['/lk'])
       },
       error: (error: HttpErrorResponse) => {
         console.log(error.error);
